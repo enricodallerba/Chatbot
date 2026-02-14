@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Dallerba Enrico - Chatbot (ACS Service)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+    --bg-light: #f0f4f8;
+    --bg-dark: #1e1e1e;
+    --header-light: #4a90e2;
+    --header-dark: #333;
+    --text-light: #1f3a93;
+    --text-dark: #ddd;
+    --user-bg-light: #4a90e2;
+    --user-bg-dark: #6aafe2;
+    --bot-bg: #ffffff;
+    --bot-border: #d0e2fb;
+}
+
+html, body { 
+    height:100%; 
+    margin:0; 
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: var(--bg-light); 
+    color: var(--text-light); 
+    transition: all 0.3s;
+}
+body.dark { 
+    background: var(--bg-dark); 
+    color: var(--text-dark); 
+}
+body { display:flex; flex-direction:column; }
+
+header {
+    background: var(--header-light);
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    justify-content: space-between;
+}
+body.dark header { background: var(--header-dark); }
+
+header img {
+    width:36px; height:36px; border-radius:50%; border:2px solid white;
+    cursor:pointer; transition: transform 0.2s;
+}
+header img:hover { transform: scale(1.1); }
+
+header .title { font-weight:bold; text-align:center; flex:1; }
+
+.header-buttons { display:flex; gap:10px; }
+
+.theme-toggle {
+    padding:6px 12px; border-radius:12px; border:none; cursor:pointer;
+    font-weight:bold; background:#fff; color:#4a90e2; transition: all 0.2s;
+}
+.theme-toggle:hover { background:#e0e0e0; }
+body.dark .theme-toggle { background:#555; color:#fff; }
+
+.container { flex:1; display:flex; flex-direction:column; padding:20px; overflow-y:auto; gap:10px; }
+
+.message { padding:15px 20px; border-radius:20px; line-height:1.4; font-size:16px; animation: slideIn 0.4s forwards; }
+@keyframes slideIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+
+.message.bot-container { display:flex; gap:10px; align-items:flex-start; }
+.message.bot-container img { width:32px; height:32px; border-radius:50%; }
+
+.bot { 
+    background: var(--bot-bg); 
+    border:1px solid var(--bot-border); 
+    max-width:75%; 
+    padding:12px 18px; 
+}
+body.dark .bot { background:#2c2c2c; color:#ddd; border:1px solid #555; }
+
+.message.user-container { display:flex; gap:10px; justify-content:flex-end; align-items:flex-start; }
+.message.user-container img { width:28px; height:28px; border-radius:50%; }
+
+.user { 
+    background: var(--user-bg-light); 
+    color:white; 
+    max-width:65%; 
+    padding:12px 18px; 
+}
+body.dark .user { background: var(--user-bg-dark); }
+
+.option {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 22px;
+    background: #eaf1fb;
+    border-radius: 20px;
+    cursor: pointer;
+    border: 1px solid #b0d4f1;
+    color: #1f3a93; /* testo scuro */
+    transition: 0.2s;
+}
+.option:hover {
+    background: #d0e2fb;
+    transform: translateY(-2px);
+}
+body.dark .option {
+    background: #444;       /* sfondo scuro */
+    border: 1px solid #666; /* bordo leggermente più chiaro */
+    color: #fff;            /* testo bianco */
+}
+body.dark .option:hover {
+    background: #555;       /* hover leggermente più chiaro */
+}
+
+/* Pulsanti finali più belli */
+.final-link, .reset-link {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.final-link {
+    background: linear-gradient(135deg, #57c176, #3fa55a);
+    color: #fff;
+}
+.final-link:hover {
+    background: linear-gradient(135deg, #3fa55a, #2e7d45);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.reset-link {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: #fff;
+}
+.reset-link:hover {
+    background: linear-gradient(135deg, #c0392b, #992d22);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+/* Adattamento dark mode */
+body.dark .final-link {
+    background: linear-gradient(135deg, #57c176, #3fa55a);
+}
+body.dark .final-link:hover {
+    background: linear-gradient(135deg, #3fa55a, #2e7d45);
+}
+body.dark .reset-link {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+body.dark .reset-link:hover {
+    background: linear-gradient(135deg, #c0392b, #992d22);
+}
+
+/* Typing animation */
+.typing { 
+    font-style:italic; 
+    color:#888; 
+    display:flex; 
+    align-items:center; 
+    gap:8px; 
+}
+.typing .dots span { 
+    display:inline-block; 
+    width:8px; 
+    height:8px; 
+    background:#888; 
+    border-radius:50%; 
+    animation: blink 1s infinite; 
+}
+.typing .dots span:nth-child(2) { animation-delay:0.2s; }
+.typing .dots span:nth-child(3) { animation-delay:0.4s; }
+@keyframes blink { 
+    0%, 80%, 100% { opacity:0; } 
+    40% { opacity:1; }
+}
+
+@media (max-width:480px) {
+    .message { font-size:15px; }
+    .option { font-size:14px; padding:8px 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <img src="https://lh3.googleusercontent.com/a/ACg8ocIGI5JbUNYEGvIt2B9yIYn1U-ODdtAuxgWyjdtIlsBCewCtit_T=s288-c-no" onclick="reset()">
+    <div class="title">Dallerba Enrico - Assistente interattivo</div>
+    <div class="header-buttons">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 Tema</button>
+    </div>
+</header>
+
+<div class="container" id="app"></div>
+
+<script>
+let darkMode=false;
+function toggleTheme(){ 
+    darkMode=!darkMode; 
+    document.body.classList.toggle('dark',darkMode); 
+}
+
+// METTERE hidden: true PER NASCONDERE e hidden: false o niente per MOSTRARE
+const steps = {
+    start: { 
+        question: "Seleziona una delle opzioni disponibili:", 
+        options: [
+            {text: "Benvenuto nella mia Chatbot", next: "00-Benvenuto-00", hidden: false},
+            {text: "CLIENTE: Mooney", next: "01-Mooney-00", hidden: false},
+       	    {text: "CLIENTE: 02", next: "02-Cliente-02", hidden: true},
+            {text: "CLIENTE: 03", next: "03-Cliente-03", hidden: true},
+            {text: "CLIENTE: 04", next: "04-Cliente-04", hidden: true},
+            {text: "CLIENTE: 05", next: "05-Cliente-05", hidden: true},
+            {text: "CLIENTE: 06", next: "06-Cliente-06", hidden: true},
+            {text: "CLIENTE: 07", next: "07-Cliente-07", hidden: true},
+            {text: "CLIENTE: 08", next: "08-Cliente-08", hidden: true},
+            {text: "CLIENTE: 09", next: "09-Cliente-09", hidden: true},
+            {text: "CLIENTE: 10", next: "10-Cliente-10", hidden: true}
+        ]
+    },
+
+    "00-Benvenuto-00": {
+        question: "Benvenuto !! 🙂 Intanto comincio a dirti che puoi riavviare la Chatbot cliccando sul mio avatar in alto a sinistra. E, se non lo hai già fatto, fatti abilitare al *Cloud-ACS* ☁️💻. La maggior parte delle informazioni le potrai trovare lì. Molti link che ti suggerirò saranno all'interno del cloud, quindi se non hai le credenziali d'accesso, non potrai visualizzarli. Eccone alcuni che ti suggerisco di visualizzare",
+        options: [
+            {text: "Istruzioni sul cloud e documentazione Mooney (Video)", link: "https://nc.acs-service.it/apps/files/favorites/181645?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY&openfile=true"},
+            {text: "Speedy - Come compilare e chiudere le chiamate utilizzando la tab Movimenta prodotto e come creare il Packing List (Video)", link: "https://nc.acs-service.it/apps/files/files/235366?dir=/ACS/DOCUMENTAZIONE%20TECNICA/SPEEDY&openfile=true"},
+            {text: "Guida tecnici – Movimenta prodotto (PDF)", link: "https://nc.acs-service.it/apps/files/files/186799?dir=/ACS/DOCUMENTAZIONE%20TECNICA/SPEEDY&openfile=true"}
+        ]
+    },
+
+// CLIENTI INSERITI
+
+    "01-Mooney-00": {
+        question: "Hai scelto il CLIENTE: Mooney. Seleziona una delle opzioni disponibili:",
+        options: [
+            {text: "Rapportini e codici", next: "01-Mooney-01"},
+            {text: "Tavolo operativo e procedure", next: "01-Mooney-02"},
+            {text: "Come riconoscere se nel terminale è presente la SuperApp e dove vedere il silicon number", next: "01-Mooney-03"},
+            {text: "Aggiornamento terminali Mooney", next: "01-Mooney-04"},
+            {text: "SERVIZI", next: "01-Mooney-05"},
+            {text: "SERVIZI con EasyCassa", next: "01-Mooney-06"},
+            {text: "Cliente ACI", next: "01-Mooney-07"},
+            {text: "Dispositivo PAX", next: "01-Mooney-08"}
+        ]
+    },
+
+    "01-Mooney-01": {
+        question: "I verbali andranno compilati in tutte le loro parti in maniera chiara e precisa. Ricordatevi di fare anche le fotografie dei seriali ben leggibili di tutte le periferiche che ritirate e di quelle che installate. Rapportini e fotografie andranno poi allegati in chiamata su Speedy al momento della chiusura.",
+        options: [
+            {text: "Esempio compilazione verbale (Nuova installazione)", link: "https://nc.acs-service.it/apps/files/files/181333?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/01%20-%20Rapportini%20e%20codici/Esempio%20compilazione%20verbale%20%28Nuova%20installazione%29"},
+            {text: "Esempio compilazione verbale (Sostituzione POS)", link: "https://nc.acs-service.it/apps/files/files/181335?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/01%20-%20Rapportini%20e%20codici/Esempio%20compilazione%20verbale%20%28Sostituzione%20POS%29"},
+            {text: "Verbale in bianco", link: "https://nc.acs-service.it/apps/files/files/180755?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/01%20-%20Rapportini%20e%20codici&openfile=true"},
+            {text: "Altri esempi e tabella excel dei codici", link: "https://nc.acs-service.it/apps/files/favorites/180751?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/01%20-%20Rapportini%20e%20codici"}
+        ]
+    },
+
+    "01-Mooney-02": {
+        question: "Per l'allineamento dei terminali e per le problematiche legate al mondo SERVIZI, dovete sentire il tavolo operativo Mooney al numero ☎️ 02 3045 7527 Tasto 1. Il tasto 2 invece è riservato al mondo EasyCassa",
+        options: [
+            {text: "Numeri TO", link: "https://nc.acs-service.it/apps/files/favorites/237304?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/02%20-%20Tavolo%20operativo%20e%20procedure&openfile=true"},
+            {text: "Procedura intervento cliente Mooney", link: "https://nc.acs-service.it/apps/files/favorites/237305?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/02%20-%20Tavolo%20operativo%20e%20procedure&openfile=true"}
+        ]
+    },
+
+    "01-Mooney-03": {
+        question: "I nuovi terminali dovrebbero avere già la SuperApp installata. A volte capita che non sia così. Ecco come riconoscere se è presente o meno e dove leggere il silicon number. Il silicon verrà richiesto dal Tavolo operativo durante l'allineamneto dei terminali.",
+        options: [
+            {text: "Immagini d'esempio", link: "https://nc.acs-service.it/apps/files/favorites/181316?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/03%20-%20Aggiornamento%20terminali%20Mooney/Come%20riconoscere%20se%20nel%20terminale%20%C3%A8%20presente%20la%20SuperApp%20e%20dove%20vedere%20il%20silicon%20number"}
+        ]
+    },
+
+    "01-Mooney-04": {
+        question: "Dopo che si siamo accorti che il terminale non ha la SuperApp installata oppure abbiamo necessità di reinstallarla, dobbiamo accedere al menù tecnico. Inoltre dobbiamo prepararci una chiavetta USB con gli eseguibili necessari. Questi eseguibili si trovano nel file CHIAVETTA_TERMINALI_160.ZIP. Per entrare in menù tecnico è necessario che il POS sia collegato e che abbiate la TESSERA MOONEY con il suo PIN",
+        options: [
+            {text: "Come accedere al menù tecnico", link: "https://nc.acs-service.it/apps/files/favorites/180761?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/03%20-%20Aggiornamento%20terminali%20Mooney/Come%20accedere%20al%20men%C3%B9%20tecnico"},
+            {text: "LEGGIMI (Info aggioneamento terminali)", link: "https://nc.acs-service.it/apps/files/favorites/180764?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/03%20-%20Aggiornamento%20terminali%20Mooney&openfile=true"},
+            {text: "Video d'esempio - Aggiornamento terminale RCH", link: "https://nc.acs-service.it/apps/files/favorites/180765?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/03%20-%20Aggiornamento%20terminali%20Mooney&openfile=true"},
+            {text: "CHIAVETTA_TERMINALI_160.ZIP", link: "https://nc.acs-service.it/apps/files/favorites/180765?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/03%20-%20Aggiornamento%20terminali%20Mooney"}
+        ]
+    },
+
+    "01-Mooney-05": {
+        question: "Intanto vi ricordo il numero di tel. del tavolo operativo Mooney ☎️ 02 3045 7527 Tasto 1 (SERVIZI). Capirete che NON vi troverete di fronte ad una postazione EasyCassa per l'assenza di cassa e stampante fiscale. Farete interventi sui terminali Fusion, RCH e su tutte le periferiche collegate ad essi. La SuperApp Mooney, oltre che sui terminali, la troverete anche sui PC privati del cliente ed anche nei dispositivi PAX che saranno trattati in una sezione a parte. Ecco alcune opzioni che potrebbero interessarti:",
+        options: [
+            {text: "Chiamata IMAC - Nuova installazione da zero", link: "https://nc.acs-service.it/apps/files/favorites/180773?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/04%20-%20SERVIZI/02%20-%20Terminali%20Fusion%20e%20RCH%20pi%C3%B9%20nuova%20installazione/Nuova%20installazione%20da%20ZERO%20%28IMAC%29"},
+            {text: "Installazione SuperApp sul PC Portatile del cliente", link: "https://nc.acs-service.it/apps/files/favorites/180783?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/04%20-%20SERVIZI/07%20-%20Installazione%20SuperApp%20sul%20PC%20Portatile%20del%20cliente%20e%20DRIVER%20PC"},
+            {text: "POS Desk3200", link: "https://nc.acs-service.it/apps/files/favorites/237310?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/04%20-%20SERVIZI/03%20-%20POS%20Desk3200%20%28Su%20RCH%20-%20FUSION%20e%20SuperAppPC%29"},
+            {text: "Router Tiesse", link: "https://nc.acs-service.it/apps/files/favorites/180779?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/04%20-%20SERVIZI/04%20-%20Router/ROUTER%20TIESSE"},
+            {text: "Router Huawei", link: "https://nc.acs-service.it/apps/files/favorites/180778?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/04%20-%20SERVIZI/04%20-%20Router/ROUTER%20HUAWEI"},
+            {text: "Test periferiche", link: "https://nc.acs-service.it/apps/files/favorites/180804?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/04%20-%20SERVIZI/05%20-%20Test%20periferiche&openfile=true"},
+            {text: "Problematiche riscontrate dai tecnici", link: "https://nc.acs-service.it/apps/files/favorites/180868?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/04%20-%20SERVIZI/06%20-%20Problematiche%20riscontrate%20dai%20tecnici"},
+            {text: "Come accedere al menù tecnico", link: "https://nc.acs-service.it/apps/files/favorites/180771?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/04%20-%20SERVIZI/01%20-%20Come%20accedere%20al%20men%C3%B9%20tecnico"}
+        ]
+    },
+
+    "01-Mooney-06": {
+        question: "Intanto vi ricordo il numero di tel. del tavolo operativo Mooney ☎️ 02 3045 7527 Tasto 2 (EasyCassa). Capirete che vi troverete di fronte ad una postazione EasyCassa per la presenza di una cassa e di una stampante fiscale. Gli interventi si dividono in due tipologie, a seconda che i terminali siano collegati alla rete tramite modem 4G oppure tramite router (Consultate i due manuali corrispondenti). In pratica se c'è il MODEM 4G la stampante fiscale è collegata tramite cavo Eth alla porta di rete del terminale, mentre se è presente il router Tiesse, la stampante è collegata tramite cavo Eth alla porta 4 del router e come sempre il terminale è collegato alla porta 2. ATTENZIONE. Dalle informazioni che abbiamo ricevuto durante il corso, noi non possiamo mettere mani ai Router in quanto non siamo abilitati dalla agenzia delle entrate. In pratia possiamo sostituire tutte le periferiche tranne i router. Leggete le informazioni. Ecco alcune opzioni che potrebbero interessarti:",
+        options: [
+            {text: "Informazioni basilari", link: "https://nc.acs-service.it/apps/files/favorites/180828?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/05%20-%20SERVIZI%20con%20EasyCassa&openfile=true"},
+            {text: "MANUALE - Procedura Service EasyCassa Mooney con MODEM LTE", link: "https://nc.acs-service.it/apps/files/favorites/181617?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/05%20-%20SERVIZI%20con%20EasyCassa&openfile=true"},
+            {text: "MANUALE - Procedura Service EasyCassa Mooney con Router ADSL", link: "https://nc.acs-service.it/apps/files/favorites/181618?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/05%20-%20SERVIZI%20con%20EasyCassa&openfile=true"},
+            {text: "Video del corso EasyCassa", link: "https://nc.acs-service.it/apps/files/favorites/180834?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/05%20-%20SERVIZI%20con%20EasyCassa/Video%20del%20Corso%20EasyCassa&openfile=true"}
+        ]
+    },
+
+    "01-Mooney-07": {
+        question: "Per il cliente ACI si installano solamente POS Desk3200 collegati direttamente al router Tiesse. Si differenziano in due categorie: primo e secondo livello. Nel primo livello si installano il POS e il router e si inserisce un solo TID per ogni POS, mentre il secondo livello si appoggia al primo; quindi ci sarà già un router e almeno un POS di primo livello. Su ogni POS di secondo livello verranno inseriti quattro TID. I TID, nel caso di nuova installazione, saranno comunicati in chiamata; mentre, se si tratta di una sostituzione, potrete leggerli direttamente dal POS che andrete a sostituire. I firmware sono differenti. Per avere info sulle porte abilitate e sulle procedure, consultate le seguenti opzioni.",
+        options: [
+            {text: "Informazioni su 1 e 2 livello", link: "https://nc.acs-service.it/apps/files/favorites/237334?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/06%20-%20Cliente%20ACI&openfile=true"},
+            {text: "1 Livello - Dove si vedono i TID in chiamata", link: "https://nc.acs-service.it/apps/files/favorites/180891?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/06%20-%20Cliente%20ACI/POS%20%20Desk3200%20su%20cliente%20ACI%20-%201%20Livello&openfile=true"},
+            {text: "1 Livello - Configurazione POS ACI 1", link: "https://nc.acs-service.it/apps/files/favorites/180859?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/06%20-%20Cliente%20ACI/POS%20%20Desk3200%20su%20cliente%20ACI%20-%201%20Livello&openfile=true"},
+            {text: "1 Livello - VIDEO di spiegazione completo", link: "https://nc.acs-service.it/apps/files/favorites/186751?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/06%20-%20Cliente%20ACI/POS%20%20Desk3200%20su%20cliente%20ACI%20-%201%20Livello&openfile=true"},
+            {text: "2 Livello - Dove si vedono i TID in chiamata", link: "https://nc.acs-service.it/apps/files/favorites/181619?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/06%20-%20Cliente%20ACI/POS%20%20Desk3200%20su%20cliente%20ACI%20-%202%20Livello&openfile=true"},
+            {text: "2 Livello - Configurazione POS ACI 2", link: "https://nc.acs-service.it/apps/files/favorites/180860?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/06%20-%20Cliente%20ACI/POS%20%20Desk3200%20su%20cliente%20ACI%20-%202%20Livello&openfile=true"},
+            {text: "Come resettare totalmente il POS Desk300 (VIDEO)", link: "https://nc.acs-service.it/apps/files/favorites/180913?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/06%20-%20Cliente%20ACI&openfile=true"},
+            {text: "Firmware 1 Livello", link: "https://nc.acs-service.it/apps/files/favorites/180857?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/06%20-%20Cliente%20ACI/POS%20%20Desk3200%20su%20cliente%20ACI%20-%201%20Livello"},
+            {text: "Firmware 2 Livello", link: "https://nc.acs-service.it/apps/files/favorites/180858?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/06%20-%20Cliente%20ACI/POS%20%20Desk3200%20su%20cliente%20ACI%20-%202%20Livello"}
+        ]
+    },
+
+    "01-Mooney-08": {
+        question: "I modelli di dispositivi PAX previsti sono due: A930 e A960. Consultare i manuali corrispondenti per le istruzioni dettagliate. È possibile procedere direttamente dalla fase 3, in quanto le prime due fasi vengono eseguite in laboratorio e i dispositivi saranno consegnati già installati.",
+        options: [
+            {text: "Manuale PAX A930", link: "https://nc.acs-service.it/apps/files/favorites/180851?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/07%20-%20Dispositivo%20PAX&openfile=true"},
+            {text: "Manuale PAX A960", link: "https://nc.acs-service.it/apps/files/favorites/180852?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/07%20-%20Dispositivo%20PAX&openfile=true"},
+            {text: "Foto d'esempio", link: "https://nc.acs-service.it/apps/files/favorites/180852?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/07%20-%20Dispositivo%20PAX"}
+        ]
+    },    
+
+// COPIA INCOLLA ESEMPIO
+    
+    "01-oooooo-01": {
+        question: "bla vla bla",
+        options: [
+            {text: "bla bla", link: "https://"},
+            {text: "oh oh oh", link: "https://"}
+        ]
+    },
+
+// CLIENTI DA INSERIRE
+    
+    "02-Cliente-02": {
+        question: "Hai scelto Opzione-02. Seleziona una delle risposte disponibili:",
+        options: [
+            {text: "Opzione-02-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
+        ]
+    },
+
+    "03-Cliente-03": {
+        question: "Hai scelto Opzione-03. Seleziona una delle risposte disponibili:",
+        options: [
+            {text: "Opzione-03-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
+        ]
+    },
+
+    "04-Cliente-04": {
+        question: "Hai scelto Opzione-04. Seleziona una delle risposte disponibili:",
+        options: [
+            {text: "Opzione-04-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
+         ]
+    },
+
+    "05-Cliente-05": {
+        question: "Hai scelto Opzione-05. Seleziona una delle risposte disponibili:",
+        options: [
+            {text: "Opzione-05-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
+        ]
+    },
+
+    "06-Cliente-06": {
+        question: "Hai scelto Opzione-06. Seleziona una delle risposte disponibili:",
+        options: [
+            {text: "Opzione-06-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
+        ]
+    },
+
+    "07-Cliente-07": {
+        question: "Hai scelto Opzione-07. Seleziona una delle risposte disponibili:",
+        options: [
+        ]
+    },
+
+    "08-Cliente-08": {
+        question: "Hai scelto Opzione-08. Seleziona una delle risposte disponibili:",
+        options: [
+            {text: "Opzione-08-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
+        ]
+    },
+
+    "09-Cliente-09": {
+        question: "Hai scelto Opzione-09. Seleziona una delle risposte disponibili:",
+        options: [
+            {text: "Opzione-09-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
+        ]
+    },
+
+    "10-Cliente-10": {
+        question: "Hai scelto Opzione-10. Seleziona una delle risposte disponibili:",
+        options: [
+            {text: "Opzione-10-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
+        ]
+    }
+};
+
+const app=document.getElementById("app");
+const genericUserAvatar="https://cdn-icons-png.flaticon.com/512/149/149071.png";
+const botAvatar="https://lh3.googleusercontent.com/a/ACg8ocIGI5JbUNYEGvIt2B9yIYn1U-ODdtAuxgWyjdtIlsBCewCtit_T=s288-c-no";
+
+function showTyping(callback){
+    const typingDiv=document.createElement("div");
+    typingDiv.className="message bot typing";
+    typingDiv.innerHTML='Dallerba Enrico sta scrivendo<span class="dots"><span></span><span></span><span></span></span>';
+    app.appendChild(typingDiv);
+    app.scrollTop=app.scrollHeight;
+
+    const duration = 800 + Math.random()*600;
+    setTimeout(()=>{ typingDiv.remove(); if(callback) callback(); }, duration);
+}
+
+function typeBotMessage(text,callback){
+    showTyping(()=>{
+        const container=document.createElement("div");
+        container.className="message bot-container";
+
+        const avatar=document.createElement("img");
+        avatar.src=botAvatar;
+
+        const msg=document.createElement("div");
+        msg.className="message bot";
+
+        container.appendChild(avatar);
+        container.appendChild(msg);
+        app.appendChild(container);
+        app.scrollTop=app.scrollHeight;
+
+        let i=0;
+        const speed = 20;
+        const interval=setInterval(()=>{
+            msg.textContent+=text.charAt(i);
+            i++;
+            app.scrollTop=app.scrollHeight;
+            if(i>=text.length){ clearInterval(interval); if(callback) callback(); }
+        }, speed);
+    });
+}
+
+function addOptions(options){
+    const div=document.createElement("div");
+    div.className="message bot";
+
+    // filtriamo le opzioni nascoste
+    options
+      .filter(opt => !opt.hidden)
+      .forEach(opt=>{
+        const btn=document.createElement("div");
+        btn.className="option";
+        btn.textContent=opt.text;
+        btn.onclick=()=>handleOption(opt);
+        div.appendChild(btn);
+    });
+
+    app.appendChild(div);
+    app.scrollTop=app.scrollHeight;
+}
+
+function handleOption(opt){
+    const container=document.createElement("div");
+    container.className="message user-container";
+
+    const avatar=document.createElement("img");
+    avatar.src=genericUserAvatar;
+
+    const msg=document.createElement("div");
+    msg.className="message user";
+    msg.textContent=opt.text;
+
+    container.appendChild(avatar);
+    container.appendChild(msg);
+    app.appendChild(container);
+
+    document.querySelectorAll(".message.bot").forEach(div=>{
+        if(div.querySelector(".option")) div.remove();
+    });
+
+    setTimeout(()=>{
+        if(opt.next) showStep(opt.next);
+        else if(opt.link){
+            const finalDiv=document.createElement("div");
+            finalDiv.className="message bot final-buttons";
+            finalDiv.innerHTML=`
+                Risultato:<br>
+                <a href="${opt.link}" target="_blank" class="final-link">Vai alla pagina</a>
+                <a href="#" onclick="reset()" class="reset-link">Reset Chat</a>
+            `;
+            app.appendChild(finalDiv);
+            app.scrollTop=app.scrollHeight;
+        }
+    },300);
+}
+
+function showStep(stepKey){
+    const step=steps[stepKey];
+    typeBotMessage(step.question,()=>{ addOptions(step.options); });
+}
+
+function reset(){
+    app.innerHTML="";
+    showStep("start");
+}
+
+reset();
+</script>
+
+</body>
+</html>
