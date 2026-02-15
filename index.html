@@ -192,6 +192,31 @@ body.dark .reset-link:hover {
 </head>
 <body>
 
+<!-- SCHERMATA LOGIN -->
+<div id="loginScreen" style="
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#1e1e1e;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    color:white;
+    z-index:9999;
+">
+    <h2>Accesso Riservato</h2>
+    <input type="password" id="passwordInput" placeholder="Inserisci password"
+        style="padding:10px 15px; border-radius:8px; border:none; margin:10px; font-size:16px;">
+    <button onclick="checkPassword()"
+        style="padding:10px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">
+        Accedi
+    </button>
+    <p id="errorMsg" style="color:#ff6b6b; display:none;">Password errata</p>
+</div>
+
 <header>
     <img src="https://lh3.googleusercontent.com/a/ACg8ocIGI5JbUNYEGvIt2B9yIYn1U-ODdtAuxgWyjdtIlsBCewCtit_T=s288-c-no" onclick="reset()">
     <div class="title">Assistente interattivo (ACS Service)</div>
@@ -517,11 +542,25 @@ function reset(){
     showStep("start");
 }
 
-reset();
+/* ===== BLOCCO SICUREZZA ===== */
+const SECURITY_PASSWORD = "ACS2026"; // CAMBIA QUI LA PASSWORD
+
+function checkPassword(){
+    const input = document.getElementById("passwordInput").value;
+    const errorMsg = document.getElementById("errorMsg");
+
+    if(input === SECURITY_PASSWORD){
+        document.getElementById("loginScreen").style.display = "none";
+        reset();
+    } else {
+        errorMsg.style.display = "block";
+    }
+}
+/* ===== FINE BLOCCO SICUREZZA ===== */
+
+// reset();   <-- QUESTA RIGA DEVE ESSERE COMMENTATA O ELIMINATA
+
 </script>
 
 </body>
 </html>
-
-
-
