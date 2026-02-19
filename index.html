@@ -241,17 +241,20 @@ const steps = {
         options: [
             {text: "Benvenuto nella mia Chatbot", next: "00-Benvenuto-00", hidden: false},
             {text: "CLIENTE: Mooney", next: "01-Mooney-00", hidden: false},
-       	    {text: "CLIENTE: 02", next: "02-Cliente-02", hidden: true},
-            {text: "CLIENTE: 03", next: "03-Cliente-03", hidden: true},
-            {text: "CLIENTE: 04", next: "04-Cliente-04", hidden: true},
-            {text: "CLIENTE: 05", next: "05-Cliente-05", hidden: true},
-            {text: "CLIENTE: 06", next: "06-Cliente-06", hidden: true},
-            {text: "CLIENTE: 07", next: "07-Cliente-07", hidden: true},
-            {text: "CLIENTE: 08", next: "08-Cliente-08", hidden: true},
-            {text: "CLIENTE: 09", next: "09-Cliente-09", hidden: true},
-            {text: "CLIENTE: 10", next: "10-Cliente-10", hidden: true}
+            {text: "CLIENTE: POSTE", next: "02-Poste-00", hidden: false},
+       	    {text: "CLIENTE: 02", next: "02-Cliente02-00", hidden: true},
+            {text: "CLIENTE: 03", next: "03-Cliente03-00", hidden: true},
+            {text: "CLIENTE: 04", next: "04-Cliente04-00", hidden: true},
+            {text: "CLIENTE: 05", next: "05-Cliente05-00", hidden: true},
+            {text: "CLIENTE: 06", next: "06-Cliente06-00", hidden: true},
+            {text: "CLIENTE: 07", next: "07-Cliente07-00", hidden: true},
+            {text: "CLIENTE: 08", next: "08-Cliente08-00", hidden: true},
+            {text: "CLIENTE: 09", next: "09-Cliente09-00", hidden: true},
+            {text: "CLIENTE: 10", next: "10-Cliente10-00", hidden: true}
         ]
     },
+
+// MESSAGGIO DI BENVENUTO e INFO su CHATBOT (00)
 
     "00-Benvenuto-00": {
         question: "Benvenuto !! 🙂 Intanto comincio a dirti che puoi riavviare la Chatbot cliccando sul mio avatar in alto a sinistra. E, se non lo hai già fatto, fatti abilitare al *Cloud-ACS* ☁️💻. La maggior parte delle informazioni le potrai trovare lì. Molti link che ti suggerirò saranno all'interno del cloud, quindi se non hai le credenziali d'accesso, non potrai visualizzarli. Eccone alcuni che ti suggerisco di visualizzare",
@@ -263,6 +266,8 @@ const steps = {
     },
 
 // CLIENTI INSERITI
+
+// CLIENTE: MOONEY (01)
 
     "01-Mooney-00": {
         question: "Hai scelto il CLIENTE: Mooney. Seleziona una delle opzioni disponibili:",
@@ -307,7 +312,7 @@ const steps = {
         question: "Dopo che ci siamo accorti che il terminale non ha la SuperApp installata oppure abbiamo necessità di reinstallarla, dobbiamo accedere al menù tecnico. Inoltre dobbiamo prepararci una chiavetta USB con gli eseguibili necessari. Questi eseguibili si trovano nel file CHIAVETTA_TERMINALI_160.ZIP. Per entrare in menù tecnico è necessario che il POS sia collegato e che abbiate la TESSERA MOONEY con il suo PIN",
         options: [
             {text: "Come accedere al menù tecnico", link: "https://nc.acs-service.it/apps/files/favorites/180761?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/03%20-%20Aggiornamento%20terminali%20Mooney/Come%20accedere%20al%20men%C3%B9%20tecnico"},
-            {text: "LEGGIMI (Info aggioneamento terminali)", link: "https://nc.acs-service.it/apps/files/favorites/180764?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/03%20-%20Aggiornamento%20terminali%20Mooney&openfile=true"},
+            {text: "LEGGIMI (Info aggioneamento terminali)", link: "https://nc.acs-service.it/apps/files/favorites/237309?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/03%20-%20Aggiornamento%20terminali%20Mooney&openfile=true"},
             {text: "Video d'esempio - Aggiornamento terminale RCH", link: "https://nc.acs-service.it/apps/files/favorites/180765?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/03%20-%20Aggiornamento%20terminali%20Mooney&openfile=true"},
             {text: "CHIAVETTA_TERMINALI_160.ZIP", link: "https://nc.acs-service.it/apps/files/favorites/180765?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/MOONEY/03%20-%20Aggiornamento%20terminali%20Mooney"}
         ]
@@ -361,6 +366,97 @@ const steps = {
         ]
     },    
 
+// CLIENTE: POSTE (02)
+
+    "02-Poste-00": {
+        question: "Hai scelto il CLIENTE: POSTE. Seleziona una delle opzioni disponibili:",
+        options: [
+            {text: "Stampanti multifunzione", next: "02-Poste-01"},
+            {text: "COMMESSA XXX", next: "xxx", hidden: true},
+            {text: "COMMESSA YYY", next: "yyy", hidden: true}
+        ]
+    },
+
+    "02-Poste-01": {
+        question: "Hai scelto il CLIENTE: POSTE. Seleziona una delle opzioni disponibili:",
+        options: [
+            {text: "KYOCERA: Installazioni", next: "02-Poste-01-01"},
+            {text: "KYOCERA: Manutenzione", next: "02-Poste-01-02"},
+            {text: "LEXMARK", next: "02-Poste-01-03"},
+            {text: "SHARP", next: "02-Poste-01-04"},
+            {text: "ITALWARE Verbale in bianco", link: "https://nc.acs-service.it/apps/files/favorites/173147?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI&openfile=true"},
+            {text: "Pagina di TEST", link: "https://nc.acs-service.it/apps/files/favorites/173146?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI&openfile=true"},
+            {text: "Tabella DNS e WINS", link: "https://nc.acs-service.it/apps/files/favorites/173148?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI&openfile=true"}
+        ]
+    },
+
+    "02-Poste-01-01": {
+        question: "Hai scelto la stampante multifunzione KYOCERA: Vi consiglio di partire dal video del corso di formazione per poi passare al resto:",
+        options: [
+            {text: "Installazione MTF - Corso di formazione (VIDEO)", link: "https://nc.acs-service.it/apps/files/favorites/236495?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/05%20-%20Video%20di%20formazione&openfile=true"},
+            {text: "Montaggio Ram e SDD (VIDEO)", link: "https://nc.acs-service.it/apps/files/favorites/187301?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/03%20-%20Video%20montaggio%20printer&openfile=true"},
+            {text: "Montaggio Vaschetta recupero Toner e sblocco Toner (VIDEO)", link: "https://nc.acs-service.it/apps/files/favorites/187319?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/03%20-%20Video%20montaggio%20printer&openfile=true"},
+            {text: "Direzionali-Recapiti - GUIDA By Lomasto (PDF)", link: "https://nc.acs-service.it/apps/files/favorites/237363?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/01%20-%20Uffici%20direzionali%20e%20recapiti&openfile=true"},
+            {text: "Direzionali-Recapiti - Firmware", link: "https://nc.acs-service.it/apps/files/favorites/187355?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/01%20-%20Uffici%20direzionali%20e%20recapiti/01%20-%20Firmware"},
+            {text: "Direzionali-Recapiti - Bundle", link: "https://nc.acs-service.it/apps/files/favorites/187354?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/01%20-%20Uffici%20direzionali%20e%20recapiti/02%20-%20Bundle"},
+            {text: "Direzionali-Recapiti - Guida attivazione licenza Scan OCR (PDF)", link: "https://nc.acs-service.it/apps/files/favorites/187501?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/01%20-%20Uffici%20direzionali%20e%20recapiti/03%20-%20Licenza%20software%20-%20GUIDA&openfile=true"},
+            {text: "Direzionali-Recapiti - TUTTO", link: "https://nc.acs-service.it/apps/files/favorites/187112?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/01%20-%20Uffici%20direzionali%20e%20recapiti"},
+            {text: "Uffici Postali - GUIDA By Lomasto (PDF)", link: "https://nc.acs-service.it/apps/files/favorites/237364?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/02%20-%20Uffici%20Postali&openfile=true"},
+            {text: "Uffici Postali - GUIDA installazione (PDF)", link: "https://nc.acs-service.it/apps/files/favorites/187321?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/02%20-%20Uffici%20Postali/01%20-%20GUIDA%20INSTALLAZIONE&openfile=true"},
+            {text: "Uffici Postali - Firmware", link: "https://nc.acs-service.it/apps/files/favorites/227308?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/02%20-%20Uffici%20Postali/02%20-%20FIRMWARE"},
+            {text: "Uffici Postali - Bundle", link: "https://nc.acs-service.it/apps/files/favorites/227310?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/02%20-%20Uffici%20Postali/04%20-%20BUNDLE"},
+            {text: "Uffici Postali - SDP Scan", link: "https://nc.acs-service.it/apps/files/favorites/187323?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/02%20-%20Uffici%20Postali/03%20-%20SDP%20Scan/Scansione%20SDP%281.08%20-%20official%29"},
+            {text: "Uffici Postali - TUTTO", link: "https://nc.acs-service.it/apps/files/favorites/187116?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/02%20-%20Uffici%20Postali"},
+            {text: "LICENZE OCR COMPLETO aggiornato al 12-02-2026 (PDF)", link: "https://nc.acs-service.it/apps/files/favorites/237306?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE/04%20-%20Associazione%20licenza%20software%20OCR&openfile=true"},
+            {text: "Problematica - Le fotocopie sono scure (SOLUZIONE)", link: "https://nc.acs-service.it/apps/files/favorites/236616?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/01%20-%20INSTALLAZIONE&openfile=true"}
+        ]
+    },
+
+    "02-Poste-01-02": {
+        question: "Hai scelto la stampante multifunzione KYOCERA: Manutenzione. Qui trovate la procedura definitiva, con il modulo da compilare per richiedere interventi tecnici sulle MTF Kyocera in garanzia ECOSYS MA5500ifx. All’interno della sezione MANUALISTICA, consultate prima di tutto il file di testo LEGGIMI, che contiene informazioni utili.",
+        options: [
+            {text: "Verbale in bianco di intervento tecnico (Focelda)", link: "https://nc.acs-service.it/apps/files/favorites/187311?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/02%20-%20MANUTENZIONE&openfile=true"},
+            {text: "Procedura di assistenza on site - Gestione ricambio KYOCERA in Garanzia", link: "https://nc.acs-service.it/apps/files/favorites/237338?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/02%20-%20MANUTENZIONE/Manuali&openfile=true"},
+            {text: "Manualistica", link: "https://nc.acs-service.it/apps/files/favorites/187133?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/KYOCERA%20%28FOCELDA%29/02%20-%20MANUTENZIONE/Manuali"}
+        ]
+    },
+
+    "02-Poste-01-03": {
+        question: "Hai scelto la stampante multifunzione LEXMARK. Seleziona una delle opzioni disponibili:",
+        options: [
+            {text: "Credenziali Lexmark", link: "https://nc.acs-service.it/apps/files/favorites/173171?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK&openfile=true"},
+            {text: "Link diretto al CLOUD", link: "https://nc.acs-service.it/apps/files/favorites/173171?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK"},
+            {text: "Lexmark MX511 - Firmware", link: "https://nc.acs-service.it/apps/files/favorites/173151?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX511/01%20-%20Firmware"},
+            {text: "Lexmark MX511 - Bundle", link: "https://nc.acs-service.it/apps/files/favorites/173153?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX511/02%20-Bundle%20%28layout%20di%20poste%29"},
+            {text: "Lexmark MX511 - Service Manual (PDF)", link: "https://nc.acs-service.it/apps/files/favorites/173176?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX511/03%20-%20Service%20Manual&openfile=true"},
+            {text: "Lexmark MX522 - Firmware", link: "https://nc.acs-service.it/apps/files/favorites/173156?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX522/01%20-%20Firmware"},
+            {text: "Lexmark MX522 - Bundle", link: "https://nc.acs-service.it/apps/files/favorites/173158?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX522/02%20-%20Bundle%20%28layout%20di%20poste%29"},
+            {text: "Lexmark MX522 - Service Manual (PDF)", link: "https://nc.acs-service.it/apps/files/favorites/173193?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX522/03%20-%20Service%20Manual&openfile=true"},
+            {text: "Lexmark MX522 - Video manutenzione", link: "https://nc.acs-service.it/apps/files/favorites/173160?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX522/04%20-%20Video%20manutenzione%20printer"},
+            {text: "Lexmark MX522 - TUTTO", link: "https://nc.acs-service.it/apps/files/favorites/173155?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX522"},
+            {text: "Lexmark MX711 - Firmware", link: "https://nc.acs-service.it/apps/files/favorites/173162?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX711/01%20-%20Firmware"},
+            {text: "Lexmark MX711 - Bundle", link: "https://nc.acs-service.it/apps/files/favorites/173164?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX711/02%20-%20Bundle%20%28layout%20di%20poste%29"},
+            {text: "Lexmark MX711 - Service Manual (PDF)", link: "https://nc.acs-service.it/apps/files/favorites/173205?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX711/03%20-%20Service%20Manual&openfile=true"},
+            {text: "Lexmark MX711 - Documentazione e video di manutenzione", link: "https://nc.acs-service.it/apps/files/favorites/173169?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX711/04%20-%20Documentazione%20e%20video%20di%20manutenzione"},
+            {text: "Lexmark MX711 - TUTTO", link: "https://nc.acs-service.it/apps/files/favorites/173161?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/LEXMARK/Lexmark%20MX711"}
+
+        ]
+    },
+
+    "02-Poste-01-04": {
+        question: "Hai scelto la stampante multifunzione: SHARP Seleziona una delle opzioni disponibili:",
+        options: [
+            {text: "Procedura installazioni SHARP - By Lomasto (PDF)", link: "https://nc.acs-service.it/apps/files/favorites/173324?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/SHARP&openfile=true"},
+            {text: "KEY USB (Firmware e Bundle)", link: "https://nc.acs-service.it/apps/files/favorites/173228?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/SHARP/01%20-%20KEY%20USB%20%28Firmware%20e%20Bundle%29"},
+            {text: "Service Manual - Vari modelli di SHARP", link: "https://nc.acs-service.it/apps/files/favorites/173237?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/SHARP/02%20-%20Service%20Manual"},
+            {text: "Part List - Vari modelli di SHARP", link: "https://nc.acs-service.it/apps/files/favorites/173240?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/SHARP/03%20-%20PART%20LIST"},
+            {text: "Video - Settaggio MX465N", link: "https://nc.acs-service.it/apps/files/favorites/173243?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/SHARP/05%20-%20Video%20-%20Settaggio%20MX465N"},
+            {text: "Video - Settaggio MX3570N", link: "https://nc.acs-service.it/apps/files/favorites/173245?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/SHARP/06%20-%20Video%20-%20Settaggio%20MX3570N"},
+            {text: "Guida utente - Vari modelli di SHARP", link: "https://nc.acs-service.it/apps/files/favorites/173246?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/SHARP/07%20-%20Guida%20utente%20MX465%20-%20MX3570"},
+            {text: "SHARP presso SDA", link: "https://nc.acs-service.it/apps/files/favorites/173321?dir=/ACS/DOCUMENTAZIONE%20TECNICA/CLIENTI/POSTE/STAMPANTI%20MULTIFUNZIONI/SHARP/08%20-%20SHARP%20SDA"}
+        ]
+    },
+
 // COPIA INCOLLA ESEMPIO
     
     "01-oooooo-01": {
@@ -371,64 +467,66 @@ const steps = {
         ]
     },
 
+
+
 // CLIENTI DA INSERIRE
     
-    "02-Cliente-02": {
+    "02-Cliente02-00": {
         question: "Hai scelto Opzione-02. Seleziona una delle risposte disponibili:",
         options: [
             {text: "Opzione-02-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
         ]
     },
 
-    "03-Cliente-03": {
+    "02-Cliente03-00": {
         question: "Hai scelto Opzione-03. Seleziona una delle risposte disponibili:",
         options: [
             {text: "Opzione-03-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
         ]
     },
 
-    "04-Cliente-04": {
+    "02-Cliente04-00": {
         question: "Hai scelto Opzione-04. Seleziona una delle risposte disponibili:",
         options: [
             {text: "Opzione-04-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
          ]
     },
 
-    "05-Cliente-05": {
+    "02-Cliente05-00": {
         question: "Hai scelto Opzione-05. Seleziona una delle risposte disponibili:",
         options: [
             {text: "Opzione-05-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
         ]
     },
 
-    "06-Cliente-06": {
+    "02-Cliente06-00": {
         question: "Hai scelto Opzione-06. Seleziona una delle risposte disponibili:",
         options: [
             {text: "Opzione-06-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
         ]
     },
 
-    "07-Cliente-07": {
+    "02-Cliente07-00": {
         question: "Hai scelto Opzione-07. Seleziona una delle risposte disponibili:",
         options: [
         ]
     },
 
-    "08-Cliente-08": {
+    "02-Cliente08-00": {
         question: "Hai scelto Opzione-08. Seleziona una delle risposte disponibili:",
         options: [
             {text: "Opzione-08-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
         ]
     },
 
-    "09-Cliente-09": {
+    "02-Cliente09-00": {
         question: "Hai scelto Opzione-09. Seleziona una delle risposte disponibili:",
         options: [
             {text: "Opzione-09-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
         ]
     },
 
-    "10-Cliente-10": {
+    "02-Cliente10-00": {
         question: "Hai scelto Opzione-10. Seleziona una delle risposte disponibili:",
         options: [
             {text: "Opzione-10-Scelta-01", link: "https://www.acs-service.it/menu/#/login"},
